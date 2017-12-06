@@ -1,0 +1,14 @@
+<h2>Open chat rooms</h2>
+<ul class="chats">
+  <div class="right">
+    <li *ngFor="let chat of chats" [class.selected]="chat === selectedChat" (click)="onChatSelected(chat)">
+      <span class="badge">{{chat.id}}</span> {{chat.name}}
+    </li>
+  </div>
+  <div class="left">
+
+    <app-chat-room [chat]="selectedChat"></app-chat-room>
+  </div>
+
+
+</ul>

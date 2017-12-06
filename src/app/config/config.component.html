@@ -1,0 +1,12 @@
+<div>
+
+  <h2>Configuration</h2>
+  <p>{{url}}:{{port}}{{path}}</p>
+  <div>
+    <input [(ngModel)]="url" placeholder="type here the url">
+    <input [(ngModel)]="port" placeholder="port">
+    <input [(ngModel)]="path" placeholder="path">
+  </div>
+</div>
+
+<button type="button" class="btn btn-primary" (click)="save()">Save</button>
