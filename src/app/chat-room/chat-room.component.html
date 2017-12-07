@@ -1,6 +1,6 @@
-<div *ngIf="chat">
-    <input [(ngModel)]="message" placeholder="Write a message here" (keyup.enter)="send()">
+<div *ngIf="chat">    
   <h2>Current chat: {{chat.id}}:{{chat.name}}</h2>
+  <input [(ngModel)]="message" placeholder="Write a message here" (keyup.enter)="send()">
   <ul class="chat">
     <li *ngFor="let msg of chat.messages">
       {{msg}}

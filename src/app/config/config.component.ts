@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EventlogService } from '../eventlog.service';
+import { MessengerService } from '../messenger.service';
 
 @Component({
   selector: 'app-config',
@@ -8,17 +9,14 @@ import { EventlogService } from '../eventlog.service';
 })
 export class ConfigComponent implements OnInit {
 
-  url = 'localhost';
-  port = 9009;
-  path = '/mqtt';
- 
-  constructor(private eventLog: EventlogService) { }
+  constructor(private eventLog: EventlogService, public messenger: MessengerService) { }
 
   ngOnInit() { }
 
   save(): void {
-    this.eventLog.appendLog(
-      `Mqtt setting changed: ${this.url}:${this.port}${this.path}`);
+    this.messenger.configureConnection();
+    this.messenger.reconnect();    
+    this.messenger.register();
   }
 
 }

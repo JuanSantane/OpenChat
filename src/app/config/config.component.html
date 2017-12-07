@@ -1,11 +1,13 @@
 <div>
 
   <h2>Configuration</h2>
-  <p>{{url}}:{{port}}{{path}}</p>
+  <p>{{messenger.url}}:{{messenger.port}}</p>
   <div>
-    <input [(ngModel)]="url" placeholder="type here the url">
-    <input [(ngModel)]="port" placeholder="port">
-    <input [(ngModel)]="path" placeholder="path">
+    <input [(ngModel)]="messenger.url" placeholder="type here the url">
+    <input [(ngModel)]="messenger.port" placeholder="port">
+    <input [(ngModel)]="messenger.myDisplayName" placeholder="your user name">
+    <input [(ngModel)]="messenger.myChatId" placeholder="chat unique id">
+    <input [(ngModel)]="messenger.myChatName" placeholder="chat friendly name">
   </div>
 </div>
 

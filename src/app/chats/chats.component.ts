@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chat } from '../Chat';
 import { EventlogService } from '../eventlog.service';
+import { MessengerService } from '../messenger.service';
 
 @Component({
   selector: 'app-chats',
@@ -9,15 +10,9 @@ import { EventlogService } from '../eventlog.service';
 })
 export class ChatsComponent implements OnInit {
 
-  chats: Chat[] = [
-    { id: 0, name: 'general', messages: ['a','b'] },
-    { id: 1, name: 'room1', messages: [] },
-    { id: 2, name: 'room2', messages: [] }
-  ];
-
   selectedChat: Chat;
 
-  constructor(private eventLog: EventlogService) { }
+  constructor(private eventLog: EventlogService, public messenger: MessengerService) { }
 
   ngOnInit() {
   }

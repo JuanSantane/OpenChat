@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Chat } from '../Chat';
+import { MessengerService } from '../messenger.service';
 
 @Component({
   selector: 'app-chat-room',
@@ -12,13 +13,18 @@ export class ChatRoomComponent implements OnInit {
   message: string;
 
 
-  constructor() { }
+  constructor(private messenger: MessengerService) { }
 
   ngOnInit() {
   }
 
-  send():void{
-    this.chat.messages.unshift(this.message);
+  send(): void {
+    this.messenger.send({
+      chatId: this.chat.id,
+      chatName: this.chat.name,
+      msg: this.message,
+      sender: this.messenger.myDisplayName
+    });
     this.message = '';
   }
 

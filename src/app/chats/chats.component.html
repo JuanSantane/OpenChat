@@ -1,7 +1,7 @@
 <h2>Open chat rooms</h2>
 <ul class="chats">
   <div class="right">
-    <li *ngFor="let chat of chats" [class.selected]="chat === selectedChat" (click)="onChatSelected(chat)">
+    <li *ngFor="let chat of messenger.chatRooms" [class.selected]="chat === selectedChat" (click)="onChatSelected(chat)">
       <span class="badge">{{chat.id}}</span> {{chat.name}}
     </li>
   </div>

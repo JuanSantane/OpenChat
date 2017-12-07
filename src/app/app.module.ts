@@ -10,6 +10,12 @@ import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { EventlogService } from './eventlog.service';
 import { AppRoutingModule } from './/app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {
+  MqttMessage,
+  MqttModule,
+  MqttService
+} from 'ngx-mqtt';
+import { MessengerService, mqttServiceFactory } from './messenger.service';
 
 
 @NgModule({
@@ -24,9 +30,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
   imports: [
     BrowserModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MqttModule.forRoot({ 
+      provide: MqttService,
+      useFactory: mqttServiceFactory
+    })
   ],
-  providers: [EventlogService],
+  providers: [EventlogService,MessengerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
