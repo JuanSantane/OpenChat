@@ -4,18 +4,27 @@ import { Observable } from 'rxjs/Observable';
 import {
   MqttMessage,
   MqttModule,
-  MqttService
+  MqttService,
+  MqttServiceOptions
 } from 'ngx-mqtt';
 import { EventlogService } from './eventlog.service';
 import { ConnectionEvent } from './connectionEvent';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { ChatMessage } from './chatMessage';
 import { MqttClient } from 'mqtt';
+import { IClientOptions } from 'mqtt/types/lib/client-options';
 
-export const MQTT_SERVICE_OPTIONS = {
-  hostname: '127.0.0.1',
-  port: 9001,
-  connectOnCreate: false
+export const MQTT_SERVICE_OPTIONS: MqttServiceOptions = {
+  hostname: 'm14.cloudmqtt.com',
+  port: 30049,
+  connectOnCreate: false,
+  username: 'ufjjyhzj',
+  password: 'nRqQ6glDGNnI',
+  protocol: 'wss',
+  rejectUnauthorized: false,
+  clientId: 'clientId-dfsdf',
+  keepalive: 60,
+  clean: true
 };
 
 export function mqttServiceFactory() {
@@ -25,15 +34,20 @@ export function mqttServiceFactory() {
 
 @Injectable()
 export class MessengerService {
+  //var a:MqttServiceOptions;
   connectionEventMsg$: Observable<MqttMessage>;
   private chatRoomsMap: Map<number, Chat> = new Map();
   public chatRooms: Chat[] = [];
   mqtt: MqttService;
-  url = 'localhost';
-  port = 9001;
+  
+  hostname = 'm14.cloudmqtt.com';
+  port = 30049;
+  username: 'ufjjyhzj';
+  password: 'nRqQ6glDGNnI';
+
   myDisplayName: string = `user_${Math.floor(Math.random() * 99) + 1}`;
-  myChatName: string = `room_${Math.floor(Math.random() * 99) + 1}`;
-  myChatId: number = Math.floor(Math.random() * 99) + 1;
+  myChatName: string = `general`;
+  myChatId: number = 0;
   suscribed: boolean = false;
 
 
@@ -44,9 +58,12 @@ export class MessengerService {
   }
 
   public configureConnection(): void {
-    MQTT_SERVICE_OPTIONS.hostname = this.url;
+    MQTT_SERVICE_OPTIONS.hostname = this.hostname;
     MQTT_SERVICE_OPTIONS.port = this.port;
+    MQTT_SERVICE_OPTIONS.username = this.username;
+    MQTT_SERVICE_OPTIONS.password = this.password;    
   }
+  
 
   public reconnect(): void {
     try {
@@ -54,6 +71,13 @@ export class MessengerService {
     } catch (e) {
       console.log(e);
     }
+
+    this._mqttService.onError.subscribe(evt => console.log(`mqtt on error: ${evt}`))
+    this._mqttService.onClose.subscribe(evt => console.log(`mqtt on close: ${evt}`))
+    this._mqttService.onConnect.subscribe(evt => console.log(`mqtt on connect: ${evt}`))
+    this._mqttService.onReconnect.subscribe(evt => console.log(`mqtt on reconnect: ${evt}`))
+    this._mqttService.onSuback.subscribe(evt => console.log(`mqtt on suback: ${evt}`))
+
     this._mqttService.connect(MQTT_SERVICE_OPTIONS);
 
     if(!this.suscribed){
@@ -61,7 +85,8 @@ export class MessengerService {
     }
   }
 
-  suscribeToTopics(): void {
+  suscribeToTopics(): void {    
+
     this._mqttService.observe('connectionEvent/').subscribe((message: MqttMessage) => {
       try {
         var connectionEvent: ConnectionEvent = JSON.parse(
